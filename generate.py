@@ -49,7 +49,7 @@ os.environ["HF_REMOTES_OFFLINE"] = "1"
 # Redirect stdin to /dev/null
 sys.stdin = open(os.devnull)
 
-model_path = "checkpoints/tiiuae/falcon-40b-instruct"  # Specify the path to the downloaded model
+model_path = "checkpoints/tiiuae/falcon-7b"  # Specify the path to the downloaded model
 adapter_path = "output/checkpoint-3250"  # Specify the path to the adapter weights
 tokenizer = AutoTokenizer.from_pretrained(model_path)
 
@@ -64,15 +64,8 @@ try:
     # Attempt to load the model with trust_remote_code=True
     model = AutoModelForCausalLM.from_pretrained(
         model_path,
-        load_in_4bit=True, 
        # max_memory=max_memory,
         torch_dtype=torch.bfloat16,
-        quantization_config=BitsAndBytesConfig(
-            load_in_4bit=True,
-            bnb_4bit_compute_dtype=torch.bfloat16,
-            bnb_4bit_use_double_quant=True,
-            bnb_4bit_quant_type='nf4'
-        ),
         config=AutoConfig.from_pretrained(model_path, trust_remote_code=True)
     )
 except EOFError:
