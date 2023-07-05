@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -A sds-phd-2022
+#SBATCH -A ds4002fa22
 #SBATCH -p gpu
 #SBATCH --gres=gpu:a100:1 # replace X with the number of GPUs per node
 #SBATCH -C gpupod
@@ -11,7 +11,7 @@
 ##SBATCH --gres=gpu:v100:1
 ##SBATCH --gres=gpu:a100_80gb:1
 ##SBATCH -c 1
-#SBATCH -t 3-00:00:00
+#SBATCH -t 2-00:00:00
 #SBATCH -J falcon_7b_run1
 #SBATCH -o falcon_7b-%A.out
 #SBATCH -e falcon_7b-%A.err

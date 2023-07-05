@@ -1,0 +1,2 @@
+Collecting transformers@ git+https://github.com/huggingface/transformers.git (from -r requirements.txt (line 2))
+  Cloning https://github.com/huggingface/transformers.git to /tmp/pip-install-343lotb2/transformers_27059e6dfeca45fda25df1a700a4041f
