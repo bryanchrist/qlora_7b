@@ -78,6 +78,7 @@ sys.stdin = sys.__stdin__
 
 # Load the adapter weights
 model = PeftModel.from_pretrained(model, adapter_path)
+model.to('cuda')
 tokenizer = AutoTokenizer.from_pretrained(model_path)
 
 pipeline = transformers.pipeline(
@@ -93,12 +94,11 @@ for i in range(0,10):
     formatted_prompt = (f"Below is an instruction that describes a task. "
             f"Write a response that appropriately completes the request.\n\n"
             f"### Instruction:\n{prompt}\n\n### Response: ")
+    inputs = tokenizer(formatted_prompt, return_tensors="pt")
+    input_ids = inputs.input_ids.to('cuda')  # Move input_ids tensor to the CUDA device
     sequences = pipeline(
-       formatted_prompt,
+       input_ids=input_ids,
         max_new_tokens = 100,
-        do_sample=True,
-        top_k=10,
-        num_return_sequences=1,
         eos_token_id=tokenizer.eos_token_id,
     )
     for seq in sequences:
