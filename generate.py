@@ -80,6 +80,33 @@ sys.stdin = sys.__stdin__
 model = PeftModel.from_pretrained(model, adapter_path)
 tokenizer = AutoTokenizer.from_pretrained(model_path)
 
+pipeline = transformers.pipeline(
+    "text-generation",
+    model=model,
+    tokenizer=tokenizer,
+    torch_dtype=torch.bfloat16,
+    trust_remote_code=True,
+    device_map="auto",
+)
+for i in range(0,10):
+    prompt = "Write a grade 4 Multiplication question and corresponding equation to solve the problem."
+    formatted_prompt = (f"Below is an instruction that describes a task. "
+            f"Write a response that appropriately completes the request.\n\n"
+            f"### Instruction:\n{prompt}\n\n### Response: ")
+    sequences = pipeline(
+       formatted_prompt,
+        max_new_tokens = 100,
+        do_sample=True,
+        top_k=10,
+        num_return_sequences=1,
+        eos_token_id=tokenizer.eos_token_id,
+    )
+    for seq in sequences:
+        output_file = "output.txt"  # Specify the path and filename for the output file
+        with open(output_file, "a") as f:  # Open the file in append mode ("a")
+            f.write(f"Result: {seq['generated_text']}" + "\n")  # Append the generated text to the file
+        print(f"Result: {seq['generated_text']}")
+        
 for i in range(0, 10):
     prompt = "Write a grade 4 Multiplication question and corresponding equation to solve the problem."
     formatted_prompt = (f"Below is an instruction that describes a task. "
